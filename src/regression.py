@@ -112,8 +112,13 @@ class PolynomialRegression() :
 
         # part g: modify to create matrix for polynomial model
         m = self.m_
+        Phi = X
         if(d == m+1):
             Phi = X
+        else:
+            Phi = np.ones((n, 1), dtype = int)
+            for i in range(m):
+                Phi = np.column_stack((Phi, X**(i+1)))
         ### ========== TODO : END ========== ###
         
         return Phi
@@ -245,7 +250,7 @@ class PolynomialRegression() :
         ### ========== TODO : START ========== ###
         # part c: predict y
         y = None
-        y = np.dot(self.coef_, X) 
+        y = np.dot(X, self.coef_) 
         ### ========== TODO : END ========== ###
         
         return y
@@ -266,7 +271,12 @@ class PolynomialRegression() :
         """
         ### ========== TODO : START ========== ###
         # part d: compute J(theta)
-        cost = 0
+        X = self.generate_polynomial_features(X)
+        print(X)
+        print(self.coef_)
+        h = np.dot(X, self.coef_)
+        cost = ((h - y)**2).sum()
+        print(cost)
         ### ========== TODO : END ========== ###
         return cost
     
@@ -327,7 +337,9 @@ def main() :
     ### ========== TODO : START ========== ###
     # parts b-f: main code for linear regression
     print('Investigating linear regression...')
-    
+    model = PolynomialRegression()
+    model.coef_ = np.zeros(2)
+    model.cost(train_data.X, train_data.y)
     ### ========== TODO : END ========== ###
     
     
